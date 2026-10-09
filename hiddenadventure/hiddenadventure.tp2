@@ -39,9 +39,17 @@ ACTION_IF !FILE_EXISTS ~hiddenadventure/reinstall.mrk~ BEGIN
 	ACTION_DEFINE_ARRAY tra#reload BEGIN setup END
 	ACTION_DEFINE_ARRAY tra#noconvert BEGIN setup END
 
+	/* Italian source TRA files are UTF-8, including in-game setup strings. */
+	OUTER_SET ha_source_is_utf8 = 0
+	ACTION_IF ~%LANGUAGE%~ STRING_EQUAL_CASE ~italian~ BEGIN
+		OUTER_SET ha_source_is_utf8 = 1
+		ACTION_CLEAR_ARRAY tra#noconvert
+	END
+
 	LAF HANDLE_CHARSETS
 		INT_VAR
 			infer_charsets = 1
+			from_utf8 = ha_source_is_utf8
 		STR_VAR
 			tra_path = EVAL ~hiddenadventure/tra/autotra~
 			noconvert_array = tra#noconvert
@@ -87,6 +95,10 @@ LANGUAGE ~Spanish (by alaisFcZ)~
 LANGUAGE ~Simplified Chinese(by lzw104522773)~
          ~schinese~
          ~hiddenadventure/tra/schinese/setup.tra~
+
+LANGUAGE ~Italiano by Sauler~
+         ~italian~
+         ~hiddenadventure/tra/italian/setup.tra~
 
 ////////////////////////////////////////////////
 //  ~Lady Elgea's extended plot~
@@ -631,7 +643,7 @@ COMPILE ~hiddenadventure/masktemple/RRSPMASK.D~
 
 COPY ~hiddenadventure/masktemple/RRSPMASK.CRE~ ~override~
 COPY ~hiddenadventure/masktemple/RRSPMASK.STO~ ~override~
-SAY 0xc ~Haus des Schattens~
+SAY 0xc @120005
 
 /* add travel region */
 COPY_EXISTING ~AR0300.are~ ~override~ 
