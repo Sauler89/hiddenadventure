@@ -39,17 +39,14 @@ ACTION_IF !FILE_EXISTS ~hiddenadventure/reinstall.mrk~ BEGIN
 	ACTION_DEFINE_ARRAY tra#reload BEGIN setup END
 	ACTION_DEFINE_ARRAY tra#noconvert BEGIN setup END
 
-	/* Italian source TRA files are UTF-8, including in-game setup strings. */
-	OUTER_SET ha_source_is_utf8 = 0
+	/* Italian setup.tra contains in-game text and must be converted, too. */
 	ACTION_IF ~%LANGUAGE%~ STRING_EQUAL_CASE ~italian~ BEGIN
-		OUTER_SET ha_source_is_utf8 = 1
 		ACTION_CLEAR_ARRAY tra#noconvert
 	END
 
 	LAF HANDLE_CHARSETS
 		INT_VAR
 			infer_charsets = 1
-			from_utf8 = ha_source_is_utf8
 		STR_VAR
 			tra_path = EVAL ~hiddenadventure/tra/autotra~
 			noconvert_array = tra#noconvert
